@@ -2,6 +2,11 @@ package me.jhenrique.model;
 
 import java.util.Date;
 
+/**
+ * Model class to helps users getting info about an specific tweet
+ * 
+ * @author Jefferson
+ */
 public class Tweet {
 	
 	private String username;
