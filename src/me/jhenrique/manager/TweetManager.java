@@ -33,13 +33,19 @@ public class TweetManager {
 	 * @return JSON response used by Twitter to build its results
 	 * @throws Exception
 	 */
-	private static String getURLResponse(String from, String since, String until, String scrollCursor) throws Exception {
-		String appendQuery = "from:"+from;
+	private static String getURLResponse(String from, String since, String until, String querySearch, String scrollCursor) throws Exception {
+		String appendQuery = "";
+		if (from != null) {
+			appendQuery += "from:"+from;
+		}
 		if (since != null) {
 			appendQuery += " since:"+since;
 		}
 		if (until != null) {
 			appendQuery += " until:"+until;
+		}
+		if (querySearch != null) {
+			appendQuery += " "+querySearch;
 		}
 		
 		String url = String.format("https://twitter.com/i/search/timeline?f=realtime&q=%s&src=typd&scroll_cursor=%s", URLEncoder.encode(appendQuery, "UTF-8"), scrollCursor);
@@ -68,13 +74,13 @@ public class TweetManager {
 	 * @param until Upper bound date (yyyy-mm-dd)
 	 * @return A list of all tweets found
 	 */
-	public static List<Tweet> getTweets(String username, String since, String until) {
+	public static List<Tweet> getTweets(String username, String since, String until, String querySearch) {
 		List<Tweet> results = new ArrayList<Tweet>();
 		
 		try {
 			String refreshCursor = null;
 			while (true) {
-				JSONObject json = new JSONObject(getURLResponse(username, since, until, refreshCursor));
+				JSONObject json = new JSONObject(getURLResponse(username, since, until, querySearch, refreshCursor));
 				refreshCursor = json.getString("scroll_cursor");
 				Document doc = Jsoup.parse((String) json.get("items_html"));
 				Elements tweets = doc.select("div.js-stream-tweet");
@@ -84,13 +90,14 @@ public class TweetManager {
 				}
 			
 				for (Element tweet : tweets) {
+					String usernameTweet = tweet.select("span.username.js-action-profile-name b").text();
 					String txt = tweet.select("p.js-tweet-text").text().replaceAll("[^\\u0000-\\uFFFF]", "");
 					int retweets = Integer.valueOf(tweet.select("span.ProfileTweet-action--retweet span.ProfileTweet-actionCount").attr("data-tweet-stat-count").replaceAll(",", ""));
 					int favorites = Integer.valueOf(tweet.select("span.ProfileTweet-action--favorite span.ProfileTweet-actionCount").attr("data-tweet-stat-count").replaceAll(",", ""));
 					long dateMs = Long.valueOf(tweet.select("small.time span.js-short-timestamp").attr("data-time-ms"));
 					Date date = new Date(dateMs);
 					
-					Tweet t = new Tweet(username, txt, date, retweets, favorites);
+					Tweet t = new Tweet(usernameTweet, txt, date, retweets, favorites);
 					results.add(t);
 				}
 			}
