@@ -48,7 +48,7 @@ public class TweetManager {
 			appendQuery += " "+querySearch;
 		}
 		
-		String url = String.format("https://twitter.com/i/search/timeline?f=realtime&q=%s&src=typd&scroll_cursor=%s", URLEncoder.encode(appendQuery, "UTF-8"), scrollCursor);
+		String url = String.format("https://twitter.com/i/search/timeline?f=realtime&q=%s&src=typd&max_position=%s", URLEncoder.encode(appendQuery, "UTF-8"), scrollCursor);
 		
 		URL obj = new URL(url);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -81,7 +81,7 @@ public class TweetManager {
 			String refreshCursor = null;
 			while (true) {
 				JSONObject json = new JSONObject(getURLResponse(username, since, until, querySearch, refreshCursor));
-				refreshCursor = json.getString("scroll_cursor");
+				refreshCursor = json.getString("min_position");
 				Document doc = Jsoup.parse((String) json.get("items_html"));
 				Elements tweets = doc.select("div.js-stream-tweet");
 				
@@ -102,6 +102,7 @@ public class TweetManager {
 				}
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		
 		return results;
