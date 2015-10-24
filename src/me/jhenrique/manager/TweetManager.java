@@ -26,17 +26,17 @@ import twitter4j.JSONObject;
 public class TweetManager {
 
 	/**
-	 * @param from username (without @)
+	 * @param username A specific username (without @)
 	 * @param since Lower bound date (yyyy-mm-dd)
 	 * @param until Upper bound date (yyyy-mm-dd)
 	 * @param scrollCursor (Parameter used by Twitter to do pagination of results)
 	 * @return JSON response used by Twitter to build its results
 	 * @throws Exception
 	 */
-	private static String getURLResponse(String from, String since, String until, String querySearch, String scrollCursor) throws Exception {
+	private static String getURLResponse(String username, String since, String until, String querySearch, String scrollCursor) throws Exception {
 		String appendQuery = "";
-		if (from != null) {
-			appendQuery += "from:"+from;
+		if (username != null) {
+			appendQuery += "from:"+username;
 		}
 		if (since != null) {
 			appendQuery += " since:"+since;
@@ -69,18 +69,17 @@ public class TweetManager {
 	}
 	
 	/**
-	 * @param username (without @)
-	 * @param since Lower bound date (yyyy-mm-dd)
-	 * @param until Upper bound date (yyyy-mm-dd)
+	 * @param criteria An object of the class {@link TwitterCriteria} to indicate how tweets must be searched
+	 * 
 	 * @return A list of all tweets found
 	 */
-	public static List<Tweet> getTweets(String username, String since, String until, String querySearch) {
+	public static List<Tweet> getTweets(TwitterCriteria criteria) {
 		List<Tweet> results = new ArrayList<Tweet>();
 		
 		try {
 			String refreshCursor = null;
-			while (true) {
-				JSONObject json = new JSONObject(getURLResponse(username, since, until, querySearch, refreshCursor));
+			outerLace: while (true) {
+				JSONObject json = new JSONObject(getURLResponse(criteria.getUsername(), criteria.getSince(), criteria.getUntil(), criteria.getQuerySearch(), refreshCursor));
 				refreshCursor = json.getString("min_position");
 				Document doc = Jsoup.parse((String) json.get("items_html"));
 				Elements tweets = doc.select("div.js-stream-tweet");
@@ -99,6 +98,10 @@ public class TweetManager {
 					
 					Tweet t = new Tweet(usernameTweet, txt, date, retweets, favorites);
 					results.add(t);
+					
+					if (criteria.getMaxTweets() > 0 && results.size() >= criteria.getMaxTweets()) {
+						break outerLace;
+					}
 				}
 			}
 		} catch (Exception e) {
@@ -107,6 +110,5 @@ public class TweetManager {
 		
 		return results;
 	}
-	
 	
 }
