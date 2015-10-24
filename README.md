@@ -9,3 +9,31 @@ I was searching other tools to do this job but I didn't found it, so after analy
 - **Tweet:** Model class to give some informations about a specific tweet (username, text, date, retweets, favorites)
 - **TweetManager:** A manager class to help getting tweets in Tweet Model.
 - **Main:** A simple class showing an example of use.
+
+## Examples of use
+- Get tweets by username
+``` java
+    TwitterCriteria criteria = TwitterCriteria.create()
+				.setUsername("barackobama")
+				.setMaxTweets(1);
+    Tweet t = TweetManager.getTweets(criteria).get(0);
+    System.out.println(t.getText());
+```    
+- Get tweets by query search
+``` java
+    TwitterCriteria criteria = TwitterCriteria.create()
+				.setQuerySearch("europe refugees")
+				.setMaxTweets(1);
+    Tweet t = TweetManager.getTweets(criteria).get(0);
+    System.out.println(t.getText());
+```    
+- Get tweets by username and bound dates
+``` java
+    TwitterCriteria criteria = TwitterCriteria.create()
+				.setUsername("barackobama")
+				.setSince("2015-09-10")
+				.setUntil("2015-09-12")
+				.setMaxTweets(1);
+    Tweet t = TweetManager.getTweets(criteria).get(0);
+    System.out.println(t.getText());
+```    
