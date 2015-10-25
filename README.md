@@ -17,6 +17,7 @@ I was searching other tools to do this job but I didn't found it, so after analy
   - getTweets (**TwitterCriteria**): Return the list of tweets retrieved by using an instance of **TwitterCriteria**. 
 
 - **TwitterCriteria:** A collection of search parameters to be used together with **TweetManager**.
+  - create: First method to be called, create a new empty instance. 
   - setUsername (String): An optional specific username from a twitter account. Without "@".
   - setSince (String. "yyyy-mm-dd"): A lower bound date to restrict search.
   - setUntil (String. "yyyy-mm-dd"): An upper bound date to restrist search.
