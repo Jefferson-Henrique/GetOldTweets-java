@@ -26,7 +26,11 @@ I was searching other tools to do this job but I didn't found it, so after analy
   
 - **Main:** A simple class showing examples of use.
 
-## Examples of use
+- **Exporter:** A class to execute tweets search through command-line.
+
+- **got.jar:** A runnable jar to call Exporter class. The result goes to a generated csv file named "output_got.csv".
+
+## Examples of java use
 - Get tweets by username
 ``` java
     TwitterCriteria criteria = TwitterCriteria.create()
@@ -52,4 +56,22 @@ I was searching other tools to do this job but I didn't found it, so after analy
 				.setMaxTweets(1);
     Tweet t = TweetManager.getTweets(criteria).get(0);
     System.out.println(t.getText());
+```    
+
+## Examples of command-line use
+- Get help use
+```
+    java -jar got.jar -h
+``` 
+- Get tweets by username
+```
+    java -jar got.jar username=barackobama maxtweets=1
+```    
+- Get tweets by query search
+```
+    java -jar got.jar querysearch="europe refugees" maxtweets=1
+```    
+- Get tweets by username and bound dates
+```
+    java -jar got.jar username=barackobama since=2015-09-10 until=2015-09-12 maxtweets=1
 ```    
