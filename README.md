@@ -28,7 +28,7 @@ I was searching other tools to do this job but I didn't found it, so after analy
 
 - **Exporter:** A class to execute tweets search through command-line.
 
-- **got.jar:** A runnable jar to call Exporter class. The result goes to a generated csv file named "output_got.csv".
+- **got.jar:** A runnable jar to call **Exporter** class. The result goes to a generated csv file named "output_got.csv".
 
 ## Examples of java use
 - Get tweets by username
