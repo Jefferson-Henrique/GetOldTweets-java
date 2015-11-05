@@ -23,9 +23,9 @@ public class Main {
 		t = TweetManager.getTweets(criteria).get(0);
 		
 		System.out.println("### Example 1 - Get tweets by username [barackobama]");
-		System.out.println(t.getUsername());
-		System.out.println(t.getRetweets());
-		System.out.println(t.getText());
+		System.out.println("Username: " + t.getUsername());
+		System.out.println("Retweets: " + t.getRetweets());
+		System.out.println("Text: " + t.getText());
 		System.out.println();
 		
 		/**
@@ -37,9 +37,9 @@ public class Main {
 		t = TweetManager.getTweets(criteria).get(0);
 		
 		System.out.println("### Example 2 - Get tweets by query search [europe refugees]");
-		System.out.println(t.getUsername());
-		System.out.println(t.getRetweets());
-		System.out.println(t.getText());
+		System.out.println("Username: " + t.getUsername());
+		System.out.println("Retweets: " + t.getRetweets());
+		System.out.println("Text: " + t.getText());
 		System.out.println();
 		
 		/**
@@ -53,9 +53,10 @@ public class Main {
 		t = TweetManager.getTweets(criteria).get(0);
 		
 		System.out.println("### Example 3 - Get tweets by username and bound dates [barackobama, '2015-09-10', '2015-09-12']");
-		System.out.println(t.getUsername());
-		System.out.println(t.getRetweets());
-		System.out.println(t.getText());
+		System.out.println("Username: " + t.getUsername());
+		System.out.println("Retweets: " + t.getRetweets());
+		System.out.println("Text: " + t.getText());
+		System.out.println();
 	}
 	
 }

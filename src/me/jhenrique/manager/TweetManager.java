@@ -11,12 +11,11 @@ import java.util.List;
 
 import me.jhenrique.model.Tweet;
 
+import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-
-import twitter4j.JSONObject;
 
 /**
  * Class to getting tweets based on username and optional time constraints
@@ -53,6 +52,7 @@ public class TweetManager {
 		URL obj = new URL(url);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
  
+		con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.80 Safari/537.36");
 		con.setRequestMethod("GET");
  
 		BufferedReader in = new BufferedReader(
@@ -64,7 +64,7 @@ public class TweetManager {
 			response.append(inputLine);
 		}
 		in.close();
- 
+		
 		return response.toString();
 	}
 	
