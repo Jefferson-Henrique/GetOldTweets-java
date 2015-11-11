@@ -12,6 +12,7 @@ I was searching other tools to do this job but I didn't found it, so after analy
   - date (Date)
   - retweets (int)
   - favorites (int)
+  - geo (String)
 
 - **TweetManager:** A manager class to help getting tweets in **Tweet**'s model.
   - getTweets (**TwitterCriteria**): Return the list of tweets retrieved by using an instance of **TwitterCriteria**. 
