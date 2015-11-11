@@ -94,9 +94,16 @@ public class TweetManager {
 					int retweets = Integer.valueOf(tweet.select("span.ProfileTweet-action--retweet span.ProfileTweet-actionCount").attr("data-tweet-stat-count").replaceAll(",", ""));
 					int favorites = Integer.valueOf(tweet.select("span.ProfileTweet-action--favorite span.ProfileTweet-actionCount").attr("data-tweet-stat-count").replaceAll(",", ""));
 					long dateMs = Long.valueOf(tweet.select("small.time span.js-short-timestamp").attr("data-time-ms"));
+					
+					String geo = "";
+					Elements geoElement = tweet.select("span.Tweet-geo");
+					if (geoElement.size() > 0) {
+						geo = geoElement.attr("title");
+					}
+
 					Date date = new Date(dateMs);
 					
-					Tweet t = new Tweet(usernameTweet, txt, date, retweets, favorites);
+					Tweet t = new Tweet(usernameTweet, txt, date, retweets, favorites, geo);
 					results.add(t);
 					
 					if (criteria.getMaxTweets() > 0 && results.size() >= criteria.getMaxTweets()) {

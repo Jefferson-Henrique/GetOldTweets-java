@@ -57,12 +57,12 @@ public class Exporter {
 			
 			try {
 				BufferedWriter bw = new BufferedWriter(new FileWriter("output_got.csv"));
-				bw.write("username;date;retweets;favorites;text");
+				bw.write("username;date;retweets;favorites;text;geo");
 				bw.newLine();
 				
 				System.out.println("Searching... \n");
 				for (Tweet t : TweetManager.getTweets(criteria)) {
-					bw.write(String.format("%s;%s;%d;%d;\"%s\"", t.getUsername(), sdf.format(t.getDate()), t.getRetweets(), t.getFavorites(), t.getText()));
+					bw.write(String.format("%s;%s;%d;%d;\"%s\";%s", t.getUsername(), sdf.format(t.getDate()), t.getRetweets(), t.getFavorites(), t.getText(), t.getGeo()));
 					bw.newLine();
 				}
 				

@@ -19,16 +19,19 @@ public class Tweet {
 
 	private int favorites;
 	
+	private String geo;
+	
 	public Tweet() {
 	}
 
 	public Tweet(String username, String text, Date date, int retweets,
-			int favorites) {
+			int favorites, String geo) {
 		this.username = username;
 		this.text = text;
 		this.date = date;
 		this.retweets = retweets;
 		this.favorites = favorites;
+		this.geo = geo;
 	}
 
 	public String getUsername() {
@@ -71,4 +74,12 @@ public class Tweet {
 		this.favorites = favorites;
 	}
 
+	public String getGeo() {
+		return geo;
+	}
+
+	public void setGeo(String geo) {
+		this.geo = geo;
+	}
+	
 }
