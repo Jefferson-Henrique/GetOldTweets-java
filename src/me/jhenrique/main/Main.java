@@ -1,5 +1,7 @@
 package me.jhenrique.main;
 
+import java.util.List;
+
 import me.jhenrique.manager.TweetManager;
 import me.jhenrique.manager.TwitterCriteria;
 import me.jhenrique.model.Tweet;
@@ -26,6 +28,8 @@ public class Main {
 		System.out.println("Username: " + t.getUsername());
 		System.out.println("Retweets: " + t.getRetweets());
 		System.out.println("Text: " + t.getText());
+		System.out.println("Mentions: " + t.getMentions());
+		System.out.println("Hashtags: " + t.getHashtags());
 		System.out.println();
 		
 		/**
@@ -33,13 +37,18 @@ public class Main {
 		 **/
 		criteria = TwitterCriteria.create()
 				.setQuerySearch("europe refugees")
-				.setMaxTweets(1);
-		t = TweetManager.getTweets(criteria).get(0);
+				.setSince("2015-03-01")
+				.setUntil("2015-09-30")
+				.setMaxTweets(120);
+		List<Tweet> allTweets = TweetManager.getTweets(criteria);
+		t = allTweets.get(0);
 		
 		System.out.println("### Example 2 - Get tweets by query search [europe refugees]");
 		System.out.println("Username: " + t.getUsername());
 		System.out.println("Retweets: " + t.getRetweets());
 		System.out.println("Text: " + t.getText());
+		System.out.println("Mentions: " + t.getMentions());
+		System.out.println("Hashtags: " + t.getHashtags());
 		System.out.println();
 		
 		/**
@@ -56,6 +65,8 @@ public class Main {
 		System.out.println("Username: " + t.getUsername());
 		System.out.println("Retweets: " + t.getRetweets());
 		System.out.println("Text: " + t.getText());
+		System.out.println("Mentions: " + t.getMentions());
+		System.out.println("Hashtags: " + t.getHashtags());
 		System.out.println();
 	}
 	

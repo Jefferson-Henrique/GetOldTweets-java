@@ -1,0 +1,5 @@
+# v1.1.0
+- Added new attributes to tweet model: mentions, hashtags, id, permalink.
+
+# v1.0.0
+- Initial commit

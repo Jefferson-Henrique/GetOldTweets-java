@@ -9,6 +9,10 @@ import java.util.Date;
  */
 public class Tweet {
 	
+	private String id;
+	
+	private String permalink;
+	
 	private String username;
 	
 	private String text;
@@ -19,19 +23,29 @@ public class Tweet {
 
 	private int favorites;
 	
+	private String mentions;
+	
+	private String hashtags;
+	
 	private String geo;
 	
 	public Tweet() {
 	}
 
-	public Tweet(String username, String text, Date date, int retweets,
-			int favorites, String geo) {
-		this.username = username;
-		this.text = text;
-		this.date = date;
-		this.retweets = retweets;
-		this.favorites = favorites;
-		this.geo = geo;
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getPermalink() {
+		return permalink;
+	}
+
+	public void setPermalink(String permalink) {
+		this.permalink = permalink;
 	}
 
 	public String getUsername() {
@@ -72,6 +86,22 @@ public class Tweet {
 
 	public void setFavorites(int favorites) {
 		this.favorites = favorites;
+	}
+	
+	public String getMentions() {
+		return mentions;
+	}
+
+	public void setMentions(String mentions) {
+		this.mentions = mentions;
+	}
+	
+	public String getHashtags() {
+		return hashtags;
+	}
+
+	public void setHashtags(String hashtags) {
+		this.hashtags = hashtags;
 	}
 
 	public String getGeo() {

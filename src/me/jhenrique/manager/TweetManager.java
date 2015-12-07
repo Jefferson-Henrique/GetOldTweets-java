@@ -8,6 +8,8 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import me.jhenrique.model.Tweet;
 
@@ -94,6 +96,8 @@ public class TweetManager {
 					int retweets = Integer.valueOf(tweet.select("span.ProfileTweet-action--retweet span.ProfileTweet-actionCount").attr("data-tweet-stat-count").replaceAll(",", ""));
 					int favorites = Integer.valueOf(tweet.select("span.ProfileTweet-action--favorite span.ProfileTweet-actionCount").attr("data-tweet-stat-count").replaceAll(",", ""));
 					long dateMs = Long.valueOf(tweet.select("small.time span.js-short-timestamp").attr("data-time-ms"));
+					String id = tweet.attr("data-tweet-id");
+					String permalink = tweet.attr("data-permalink-path");
 					
 					String geo = "";
 					Elements geoElement = tweet.select("span.Tweet-geo");
@@ -103,7 +107,18 @@ public class TweetManager {
 
 					Date date = new Date(dateMs);
 					
-					Tweet t = new Tweet(usernameTweet, txt, date, retweets, favorites, geo);
+					Tweet t = new Tweet();
+					t.setId(id);
+					t.setPermalink("https://twitter.com"+permalink);
+					t.setUsername(usernameTweet);
+					t.setText(txt);
+					t.setDate(date);
+					t.setRetweets(retweets);
+					t.setFavorites(favorites);
+					t.setMentions(processMentions(txt));
+					t.setHashtags(processHashtags(txt));
+					t.setGeo(geo);
+					
 					results.add(t);
 					
 					if (criteria.getMaxTweets() > 0 && results.size() >= criteria.getMaxTweets()) {
@@ -116,6 +131,28 @@ public class TweetManager {
 		}
 		
 		return results;
+	}
+	
+	private static String processMentions(String tweetText) {
+		StringBuilder sb = new StringBuilder();
+		Matcher matcher = Pattern.compile("(@\\w*)").matcher(tweetText);
+		while (matcher.find()) {
+			sb.append(matcher.group());
+			sb.append(" ");
+		}
+		
+		return sb.toString().trim();
+	}
+	
+	private static String processHashtags(String tweetText) {
+		StringBuilder sb = new StringBuilder();
+		Matcher matcher = Pattern.compile("(#\\w*)").matcher(tweetText);
+		while (matcher.find()) {
+			sb.append(matcher.group());
+			sb.append(" ");
+		}
+		
+		return sb.toString().trim();
 	}
 	
 }
