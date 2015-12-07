@@ -7,11 +7,15 @@ I was searching other tools to do this job but I didn't found it, so after analy
 
 ## Components
 - **Tweet:** Model class to give some informations about a specific tweet.
+  - id (String)
+  - permalink (String)
   - username (String)
   - text (String)
   - date (Date)
   - retweets (int)
   - favorites (int)
+  - mentions (String)
+  - hashtags (String)
   - geo (String)
 
 - **TweetManager:** A manager class to help getting tweets in **Tweet**'s model.
