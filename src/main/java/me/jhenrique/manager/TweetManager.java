@@ -1,18 +1,21 @@
 package me.jhenrique.manager;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import me.jhenrique.model.Tweet;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -25,6 +28,12 @@ import org.jsoup.select.Elements;
  * @author Jefferson Henrique
  */
 public class TweetManager {
+	
+	private static final HttpClient defaultHttpClient = HttpClients.createDefault();
+	
+	static {
+		Logger.getLogger("org.apache.http").setLevel(Level.OFF);
+	}
 
 	/**
 	 * @param username A specific username (without @)
@@ -51,23 +60,10 @@ public class TweetManager {
 		
 		String url = String.format("https://twitter.com/i/search/timeline?f=realtime&q=%s&src=typd&max_position=%s", URLEncoder.encode(appendQuery, "UTF-8"), scrollCursor);
 		
-		URL obj = new URL(url);
-		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
- 
-		con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.80 Safari/537.36");
-		con.setRequestMethod("GET");
- 
-		BufferedReader in = new BufferedReader(
-		        new InputStreamReader(con.getInputStream()));
-		String inputLine;
-		StringBuffer response = new StringBuffer();
- 
-		while ((inputLine = in.readLine()) != null) {
-			response.append(inputLine);
-		}
-		in.close();
+		HttpGet httpGet = new HttpGet(url);
+		HttpEntity resp = defaultHttpClient.execute(httpGet).getEntity();
 		
-		return response.toString();
+		return EntityUtils.toString(resp);
 	}
 	
 	/**
@@ -115,8 +111,8 @@ public class TweetManager {
 					t.setDate(date);
 					t.setRetweets(retweets);
 					t.setFavorites(favorites);
-					t.setMentions(processMentions(txt));
-					t.setHashtags(processHashtags(txt));
+					t.setMentions(processTerms("(@\\w*)", txt));
+					t.setHashtags(processTerms("(#\\w*)", txt));
 					t.setGeo(geo);
 					
 					results.add(t);
@@ -133,20 +129,9 @@ public class TweetManager {
 		return results;
 	}
 	
-	private static String processMentions(String tweetText) {
+	private static String processTerms(String patternS, String tweetText) {
 		StringBuilder sb = new StringBuilder();
-		Matcher matcher = Pattern.compile("(@\\w*)").matcher(tweetText);
-		while (matcher.find()) {
-			sb.append(matcher.group());
-			sb.append(" ");
-		}
-		
-		return sb.toString().trim();
-	}
-	
-	private static String processHashtags(String tweetText) {
-		StringBuilder sb = new StringBuilder();
-		Matcher matcher = Pattern.compile("(#\\w*)").matcher(tweetText);
+		Matcher matcher = Pattern.compile(patternS).matcher(tweetText);
 		while (matcher.find()) {
 			sb.append(matcher.group());
 			sb.append(" ");

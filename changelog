@@ -1,3 +1,7 @@
+# v1.2.0
+- Change project to maven format
+- Added apache commons httpclient (fix some problems with urlconnection requests)
+
 # v1.1.0
 - Added new attributes to tweet model: mentions, hashtags, id, permalink.
 

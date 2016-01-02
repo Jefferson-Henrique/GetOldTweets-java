@@ -1,7 +1,5 @@
 package me.jhenrique.main;
 
-import java.util.List;
-
 import me.jhenrique.manager.TweetManager;
 import me.jhenrique.manager.TwitterCriteria;
 import me.jhenrique.model.Tweet;
@@ -37,11 +35,10 @@ public class Main {
 		 **/
 		criteria = TwitterCriteria.create()
 				.setQuerySearch("europe refugees")
-				.setSince("2015-03-01")
+				.setSince("2015-05-01")
 				.setUntil("2015-09-30")
-				.setMaxTweets(120);
-		List<Tweet> allTweets = TweetManager.getTweets(criteria);
-		t = allTweets.get(0);
+				.setMaxTweets(1);
+		t = TweetManager.getTweets(criteria).get(0);
 		
 		System.out.println("### Example 2 - Get tweets by query search [europe refugees]");
 		System.out.println("Username: " + t.getUsername());

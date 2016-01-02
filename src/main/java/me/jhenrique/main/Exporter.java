@@ -21,7 +21,7 @@ public class Exporter {
 		
 		if (args.length == 1 && args[0].equals("-h")) {
 			System.out.println("\nTo use this jar, you can pass the folowing attributes:");
-			System.out.println("   username: Username of a specific twitter account (whitout @)");
+			System.out.println("   username: Username of a specific twitter account (without @)");
 			System.out.println("      since: The lower bound date (yyyy-mm-aa)");
 			System.out.println("      until: The upper bound date (yyyy-mm-aa)");
 			System.out.println("querysearch: A query text to be matched");
