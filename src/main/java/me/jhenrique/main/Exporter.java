@@ -9,9 +9,13 @@ import me.jhenrique.manager.TweetManager;
 import me.jhenrique.manager.TwitterCriteria;
 import me.jhenrique.model.Tweet;
 
-public class Exporter {
-	
+public final class Exporter {
+
 	private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+
+	private Exporter() throws InstantiationException {
+		throw new InstantiationException("This class is not for instantiation");
+	}
 
 	public static void main(String[] args) {
 		if (args == null || args.length == 0) {
