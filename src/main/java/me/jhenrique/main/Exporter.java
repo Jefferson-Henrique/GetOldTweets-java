@@ -11,7 +11,7 @@ import me.jhenrique.model.Tweet;
 
 public class Exporter {
 	
-	private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+	private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm");
 
 	public static void main(String[] args) {
 		if (args == null || args.length == 0) {
