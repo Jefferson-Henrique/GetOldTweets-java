@@ -4,19 +4,23 @@ import me.jhenrique.manager.TweetManager;
 import me.jhenrique.manager.TwitterCriteria;
 import me.jhenrique.model.Tweet;
 
-public class Main {
+public final class Main {
 	private static final String USERNAME = "Username: ";
 	private static final String RETWEETS = "Retweets: ";
 	private static final String TEXT = "Text: ";
 	private static final String MENTIONS = "Mentions: ";
 	private static final String HASHTAGS = "Hashtags: ";
 
+	private Main() throws InstantiationException {
+		throw new InstantiationException("This class is not for instantiation");
+	}
+
 	public static void main(String[] args) {
 		/**
 		 * Reusable objects
 		 */
-		TwitterCriteria criteria = null;
-		Tweet t = null;
+		TwitterCriteria criteria;
+		Tweet t;
 		
 		/**
 		 *  Example 1 - Get tweets by username

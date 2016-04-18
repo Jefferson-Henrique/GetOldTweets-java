@@ -35,6 +35,10 @@ public class TweetManager {
 		Logger.getLogger("org.apache.http").setLevel(Level.OFF);
 	}
 
+	private TweetManager() throws InstantiationException {
+		throw new InstantiationException("This class is not for instantiation");
+	}
+
 	/**
 	 * @param username A specific username (without @)
 	 * @param since Lower bound date (yyyy-mm-dd)
