@@ -4,6 +4,8 @@ import me.jhenrique.manager.TweetManager;
 import me.jhenrique.manager.TwitterCriteria;
 import me.jhenrique.model.Tweet;
 
+import java.util.List;
+
 public class Main {
 	private static final String USERNAME = "Username: ";
 	private static final String RETWEETS = "Retweets: ";
@@ -17,6 +19,7 @@ public class Main {
 		 */
 		TwitterCriteria criteria = null;
 		Tweet t = null;
+		List<Tweet> tweetList = null;
 		
 		/**
 		 *  Example 1 - Get tweets by username
@@ -70,6 +73,27 @@ public class Main {
 		System.out.println(MENTIONS + t.getMentions());
 		System.out.println(HASHTAGS + t.getHashtags());
 		System.out.println();
+
+
+		/**
+		 *  Example 4 - Get all possible tweets by username (timeline tweets + advanced search tweets)
+		 **/
+		System.out.println("### Example 4 - Get all possible tweets by username (timeline tweets + advanced search tweets) [github]");
+
+		System.out.println("Retrieving all tweets from github...");
+
+		criteria = TwitterCriteria.create()
+				.setUsername("@github");
+
+		tweetList = TweetManager.getTweets(criteria);
+
+		for (Tweet tweet : tweetList)
+			System.out.println("@" + tweet.getUsername() + " : " + tweet.getText() + tweet.getDate());
+
+
+		System.out.println();
+		System.out.println("Printed " + tweetList.size() + " tweets from @github.");
+
 	}
 	
 }

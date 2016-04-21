@@ -43,7 +43,7 @@ public class TweetManager {
 	 * @return JSON response used by Twitter to build its results
 	 * @throws Exception
 	 */
-	private static String getURLResponse(String username, String since, String until, String querySearch, String scrollCursor) throws Exception {
+	private static String getURLResponse(String username, String since, String until, String querySearch, String scrollCursor, boolean advancedSearch, String maxId) throws Exception {
 		String appendQuery = "";
 		if (username != null) {
 			appendQuery += "from:"+username;
@@ -58,7 +58,15 @@ public class TweetManager {
 			appendQuery += " "+querySearch;
 		}
 		
-		String url = String.format("https://twitter.com/i/search/timeline?f=realtime&q=%s&src=typd&max_position=%s", URLEncoder.encode(appendQuery, "UTF-8"), scrollCursor);
+		String url = null;
+
+		if(advancedSearch)
+			url = String.format("https://twitter.com/i/search/timeline?f=realtime&q=%s&src=typd&max_position=%s", URLEncoder.encode(appendQuery, "UTF-8"), scrollCursor);
+		else
+		if(maxId == null)
+			url = String.format("https://twitter.com/i/profiles/show/%s/timeline/with_replies", username);
+		else
+			url = String.format("https://twitter.com/i/profiles/show/%s/timeline/with_replies?max_position=%s", username, maxId);
 		
 		HttpGet httpGet = new HttpGet(url);
 		HttpEntity resp = defaultHttpClient.execute(httpGet).getEntity();
@@ -76,9 +84,24 @@ public class TweetManager {
 		
 		try {
 			String refreshCursor = null;
+			String refreshMaxId = null;
+			String mostRecentTweetId = null;
+			boolean advancedSearch = false;
+			if (criteria.getUsername() == null )
+				advancedSearch = true;
+
 			outerLace: while (true) {
-				JSONObject json = new JSONObject(getURLResponse(criteria.getUsername(), criteria.getSince(), criteria.getUntil(), criteria.getQuerySearch(), refreshCursor));
-				refreshCursor = json.getString("min_position");
+				JSONObject json = new JSONObject(getURLResponse(criteria.getUsername(), criteria.getSince(), criteria.getUntil(), criteria.getQuerySearch(), refreshCursor, advancedSearch, refreshMaxId));
+
+				if (json.has("min_position") && !json.isNull("min_position"))
+					refreshCursor = json.getString("min_position");
+
+				if(json.has("min_position") && json.isNull("min_position") && !advancedSearch) {
+					advancedSearch = true;
+					refreshCursor = "TWEET-"+ refreshCursor + "-" + mostRecentTweetId;
+					json = new JSONObject(getURLResponse(criteria.getUsername(), criteria.getSince(), criteria.getUntil(), criteria.getQuerySearch(), refreshCursor, advancedSearch, refreshMaxId));
+				}
+
 				Document doc = Jsoup.parse((String) json.get("items_html"));
 				Elements tweets = doc.select("div.js-stream-tweet");
 				
@@ -93,6 +116,8 @@ public class TweetManager {
 					int favorites = Integer.valueOf(tweet.select("span.ProfileTweet-action--favorite span.ProfileTweet-actionCount").attr("data-tweet-stat-count").replaceAll(",", ""));
 					long dateMs = Long.valueOf(tweet.select("small.time span.js-short-timestamp").attr("data-time-ms"));
 					String id = tweet.attr("data-tweet-id");
+					if (mostRecentTweetId == null) mostRecentTweetId = id;
+
 					String permalink = tweet.attr("data-permalink-path");
 					
 					String geo = "";
@@ -120,6 +145,7 @@ public class TweetManager {
 					if (criteria.getMaxTweets() > 0 && results.size() >= criteria.getMaxTweets()) {
 						break outerLace;
 					}
+					refreshMaxId = id;
 				}
 			}
 		} catch (Exception e) {
