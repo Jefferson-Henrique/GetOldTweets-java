@@ -1,6 +1,7 @@
 package me.jhenrique.manager;
 
 import java.net.URLEncoder;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -102,7 +103,9 @@ public class TweetManager {
 					}
 
 					Date date = new Date(dateMs);
-					
+					Time time = new Time(dateMs);
+
+
 					Tweet t = new Tweet();
 					t.setId(id);
 					t.setPermalink("https://twitter.com"+permalink);
@@ -114,7 +117,9 @@ public class TweetManager {
 					t.setMentions(processTerms("(@\\w*)", txt));
 					t.setHashtags(processTerms("(#\\w*)", txt));
 					t.setGeo(geo);
-					
+					t.setPostTime(time);
+
+
 					results.add(t);
 					
 					if (criteria.getMaxTweets() > 0 && results.size() >= criteria.getMaxTweets()) {

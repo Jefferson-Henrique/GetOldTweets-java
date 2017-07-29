@@ -1,5 +1,6 @@
 package me.jhenrique.model;
 
+import java.sql.Time;
 import java.util.Date;
 
 /**
@@ -28,6 +29,9 @@ public class Tweet {
 	private String hashtags;
 	
 	private String geo;
+
+	private Time postTime;
+
 	
 	public Tweet() {
 	}
@@ -111,5 +115,12 @@ public class Tweet {
 	public void setGeo(String geo) {
 		this.geo = geo;
 	}
-	
+
+	public Time getPostTime() {
+		return postTime;
+	}
+
+	public void setPostTime(Time postTime) {
+		this.postTime = postTime;
+	}
 }
